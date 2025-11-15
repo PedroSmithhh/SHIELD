@@ -8,6 +8,7 @@ import numpy as np
 import joblib
 import traceback
 import logging
+import requests
 
 # CONFIGURAÇÕES E LOGS
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -63,14 +64,38 @@ except Exception as e:
     model_features = []
 
 response_via = 1
-response_chuva = 1
-
 
 # SCHEMA DE ENTRADA (sem alteração)
 class InputFeatures(BaseModel):
     latitude: float
     longitude: float
     tp_veiculo_selecionado: str = Field(..., description="Tipo de veículo selecionado")
+
+# ------------------------------------------
+# Função auxiliar para obter chuva atual
+# ------------------------------------------
+def obter_chuva(latitude, longitude):
+    try:
+        url = "https://api.open-meteo.com/v1/forecast"
+        params = {
+            "latitude": latitude,
+            "longitude": longitude,
+            "current": "rain",
+            "timezone": "America/Sao_Paulo"
+        }
+
+        resp = requests.get(url, params=params, timeout=5)
+        data = resp.json()
+
+        chuva_mm = data.get("current", {}).get("rain", 0)
+
+        # Regras:
+        # - 1 se chuva >= 0.2 mm
+        # - 0 caso contrário ou dado ausente
+        return 1 if (isinstance(chuva_mm, (int, float)) and chuva_mm >= 0.2) else 0
+    except Exception:
+        return 0
+
 
 # ============================
 # ENDPOINT PRINCIAL (CALCULAR RISCO)
@@ -91,6 +116,8 @@ async def calcular_risco(features: InputFeatures):
         is_weekend = 1 if dia_semana >= 5 else 0
         hora_int = now.hour
 
+        response_chuva = obter_chuva(features.latitude, features.longitude)
+
         input_data = {
             "latitude": features.latitude,
             "longitude": features.longitude,
@@ -106,7 +133,7 @@ async def calcular_risco(features: InputFeatures):
             "tp_veiculo_outros": 0,
             "tp_veiculo_automovel": 0,
             "tipo_via_num": response_via,
-            "chuva": response_chuva
+            "Chuva": response_chuva
         }
 
         if features.tp_veiculo_selecionado in input_data:
