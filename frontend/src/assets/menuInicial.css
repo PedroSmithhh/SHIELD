@@ -1,76 +1,54 @@
-/* Container Principal */
 .menu-inicial {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* Altura total da viewport */
   height: 100vh;
-  /* Fundo escuro com um leve toque de azul/cinza (mais sofisticado que o preto puro) */
   background: #151a1d; 
-  /* Cor do texto principal */
   color: #fefeeb; 
   text-align: center;
-  /* Fonte mais moderna (se houver, senão usa a padrão) */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  /* Adiciona um gradiente sutil se quiser um efeito mais profundo: */
-  /* background: linear-gradient(145deg, #151a1d, #0d1215); */
 }
 
-/* Título */
 .menu-inicial h1 {
   margin-bottom: 10px;
-  /* Cor de destaque principal (Ciano/Azul Turquesa) */
   color: #0ca5b0;
   font-size: 3em;
-  /* Sombra de texto suave para um efeito neon/brilho */
   text-shadow: 0 0 5px rgba(12, 165, 176, 0.6); 
   letter-spacing: 2px;
 }
 
-/* Parágrafo de instrução */
 .menu-inicial p {
     margin-bottom: 30px;
     font-size: 1.1em;
-    color: #a5b3aa; /* Cor secundária suave */
+    color: #a5b3aa; 
 }
 
-/* Lista de Opções */
+
 .menu-inicial ul {
   list-style: none;
   padding: 0;
-  width: 90%; /* Limita a largura para centralizar melhor */
+  width: 90%; 
   max-width: 400px;
 }
 
-/* Item de Lista (Botão) */
 .menu-inicial li {
   margin: 20px 0;
   font-size: 1.25em;
   cursor: pointer;
   padding: 15px 30px;
-  /* Borda com cor de destaque */
   border: 2px solid #0ca5b0; 
   border-radius: 12px;
-  /* Fundo inicial quase transparente */
   background: rgba(12, 165, 176, 0.1); 
-  /* Transição suave para todas as propriedades */
   transition: all 0.4s ease; 
-  /* Sombra sutil para dar um efeito de "flutuação" */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); 
   letter-spacing: 1px;
 }
 
-/* Efeito Hover (passar o mouse) */
 .menu-inicial li:hover {
-  /* Fundo com a cor de destaque */
   background: #0ca5b0; 
-  /* Cor do texto ao passar o mouse */
   color: #151a1d; 
-  /* Remove a borda no hover para o efeito "preenchido" */
   border-color: #0ca5b0;
-  /* Sombra mais forte para o efeito de "clique" ou "seleção" */
   box-shadow: 0 6px 20px rgba(12, 165, 176, 0.8);
-  /* Leve aumento de escala (pop-out) */
   transform: translateY(-2px) scale(1.02);
 }
