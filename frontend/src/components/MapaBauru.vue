@@ -42,6 +42,7 @@ import "leaflet/dist/leaflet.css";
 import Supercluster from 'supercluster';
 import { point } from '@turf/helpers';
 import "leaflet.heat"; 
+import "@/assets/mapaBauru.css"
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -298,103 +299,3 @@ export default {
 }
 </script>
 
-<style>
-.map-container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-}
-#map {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
-}
-.map-filters-overlay {
-  position: absolute;
-  top: 10px;
-  left: 50px; /* Padrão do Leaflet para controles */
-  z-index: 1000; /* Acima do mapa */
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  padding: 10px;
-  font-family: Arial, sans-serif;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
-}
-.filtro-grupo {
-  margin-bottom: 10px;
-}
-.filtro-grupo strong {
-  display: block;
-  margin-bottom: 5px;
-  font-size: 1.1em;
-}
-.filtro-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 5px;
-}
-.filtro-item label {
-  margin-right: 10px;
-}
-.filtro-item input[type="date"] {
-  padding: 4px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-.filtro-item-radio {
-  margin-top: 5px;
-}
-.filtro-item-radio label {
-  margin-left: 5px;
-}
-.filtro-loading {
-  font-style: italic;
-  color: #555;
-}
-
-.marker-cluster {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  font-weight: bold;
-  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #000;
-  width: 40px;
-  height: 40px;
-  cursor: pointer; /* Indica que é clicável */
-}
-.marker-cluster div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-}
-.marker-cluster span {
-  line-height: 1;
-}
-
-.marker-cluster-small {
-  background-color: rgba(253, 231, 37, 0.7); /* Amarelo */
-}
-.marker-cluster-small div {
-  background-color: rgba(253, 231, 37, 0.8);
-}
-.marker-cluster-medium {
-  background-color: rgba(240, 89, 34, 0.7); /* Laranja */
-}
-.marker-cluster-medium div {
-  background-color: rgba(240, 89, 34, 0.8);
-}
-.marker-cluster-large {
-  background-color: rgba(189, 0, 38, 0.7); /* Vermelho */
-}
-.marker-cluster-large div {
-  background-color: rgba(189, 0, 38, 0.8);
-}
-</style>

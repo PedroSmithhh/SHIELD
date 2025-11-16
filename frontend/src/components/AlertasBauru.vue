@@ -26,6 +26,7 @@
 <script>
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
+import "@/assets/alertasBauru.css"
 
 export default {
   name: "AlertasBauru",
@@ -220,87 +221,3 @@ export default {
 }
 </script>
 
-<style>
-#map-container {
-  position: relative;
-  height: 100vh;
-  width: 100%;
-}
-#map {
-  height: 100%;
-  width: 100%;
-  z-index: 1;
-}
-
-/* Seta do usuário */
-.user-arrow-icon .arrow {
-  width: 0;
-  height: 0;
-  border-left: 12px solid transparent;
-  border-right: 12px solid transparent;
-  border-bottom: 20px solid #007bff;
-  transform: rotate(0deg);
-  transition: transform 0.2s linear, border-bottom-color 0.3s ease;
-  z-index: 1000;
-}
-
-/* Botão */
-.iniciar-btn {
-  position: absolute;
-  bottom: 10vh;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1001;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
-
-.iniciar-btn:hover {
-  background: #0056b3;
-}
-.lista-veiculos {
-  list-style: none;
-  padding: 0;    
-  margin: 0;
-}
-
-/* Modal */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1002;
-}
-.modal-content {
-  background: #fff;
-  padding: 25px;
-  border-radius: 10px;
-  text-align: center;
-  width: 300px;
-}
-.veiculo-btn {
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  margin: 5px 0;
-  padding: 10px 15px;
-  width: 100%;
-  cursor: pointer;
-}
-.veiculo-btn:hover {
-  background: #0056b3;
-}
-</style>

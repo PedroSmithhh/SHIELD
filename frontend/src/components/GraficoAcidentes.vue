@@ -76,6 +76,7 @@
 
 <script>
 import { Chart, registerables } from 'chart.js';
+import "@/assets/graficoAcidentes.css"
 import axios from 'axios';
 
 Chart.register(...registerables);
@@ -529,76 +530,3 @@ export default {
 
 </script>
 
-<style>
-.graficos-container {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.graficos-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-}
-
-.grafico-secao {
-  margin-bottom: 0;
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.grafico-secao h3 {
-  color: #333;
-  border-bottom: 2px solid #007bff;
-  padding-bottom: 5px;
-}
-
-.chart-wrapper {
-  position: relative;
-  height: 400px;
-  margin-top: 20px;
-}
-
-.loading-aviso {
-  text-align: center;
-  font-size: 1.2em;
-  padding: 40px;
-  color: #555;
-}
-
-.filtros-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 15px;
-  padding: 15px;
-  background-color: #e9ecef;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.filtro {
-  display: flex;
-  flex-direction: column;
-}
-
-.filtro label {
-  font-weight: bold;
-  margin-bottom: 5px;
-  font-size: 0.9em;
-  color: #343a40;
-}
-
-.filtro select,
-.filtro input[type="date"] {
-  padding: 8px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-size: 1em;
-}
-</style>
