@@ -9,49 +9,63 @@
   left: 0;
   z-index: 0;
 }
+
+
 .map-filters-overlay {
   position: absolute;
-  top: 10px;
-  left: 50px; /* Padrão do Leaflet para controles */
-  z-index: 1000; /* Acima do mapa */
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid #ccc;
+  top: 15px;
+  left: 75px; 
+  z-index: 1000;
+  background: rgba(21, 26, 29, 0.95); 
+  border: 2px solid #0ca5b0; 
   border-radius: 8px;
-  padding: 10px;
-  font-family: Arial, sans-serif;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+  padding: 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 0 10px rgba(12, 165, 176, 0.5);
+  color: #fefeeb; 
+  width: 250px;
 }
+
 .filtro-grupo {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(165, 179, 170, 0.3); 
 }
 .filtro-grupo strong {
   display: block;
-  margin-bottom: 5px;
-  font-size: 1.1em;
+  margin-bottom: 8px;
+  font-size: 1.2em;
+  color: #0ca5b0; 
 }
 .filtro-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 .filtro-item label {
   margin-right: 10px;
+  color: #a5b3aa; 
 }
 .filtro-item input[type="date"] {
-  padding: 4px;
-  border: 1px solid #ccc;
+  padding: 6px;
+
+  background: #4e3f30; 
+  border: 1px solid #4e3f30;
   border-radius: 4px;
+  color: #fefeeb;
 }
 .filtro-item-radio {
   margin-top: 5px;
 }
 .filtro-item-radio label {
   margin-left: 5px;
+  color: #fefeeb;
 }
 .filtro-loading {
   font-style: italic;
-  color: #555;
+  color: #a5b3aa;
+  margin-top: 10px;
 }
 
 .marker-cluster {
@@ -61,10 +75,10 @@
   border-radius: 50%;
   font-weight: bold;
   font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
-  color: #000;
+  color: #151a1d; 
   width: 40px;
   height: 40px;
-  cursor: pointer; /* Indica que é clicável */
+  cursor: pointer;
 }
 .marker-cluster div {
   display: flex;
@@ -79,20 +93,23 @@
 }
 
 .marker-cluster-small {
-  background-color: rgba(253, 231, 37, 0.7); /* Amarelo */
+  background-color: rgba(253, 231, 37, 0.8);
+  border: 2px solid rgba(253, 231, 37, 1);
 }
 .marker-cluster-small div {
-  background-color: rgba(253, 231, 37, 0.8);
+  background-color: rgba(253, 231, 37, 0.9);
 }
 .marker-cluster-medium {
-  background-color: rgba(240, 89, 34, 0.7); /* Laranja */
+  background-color: rgba(240, 89, 34, 0.8);
+  border: 2px solid rgba(240, 89, 34, 1);
 }
 .marker-cluster-medium div {
-  background-color: rgba(240, 89, 34, 0.8);
+  background-color: rgba(240, 89, 34, 0.9);
 }
 .marker-cluster-large {
-  background-color: rgba(189, 0, 38, 0.7); /* Vermelho */
+  background-color: rgba(189, 0, 38, 0.8);
+  border: 2px solid rgba(189, 0, 38, 1);
 }
 .marker-cluster-large div {
-  background-color: rgba(189, 0, 38, 0.8);
+  background-color: rgba(189, 0, 38, 0.9);
 }

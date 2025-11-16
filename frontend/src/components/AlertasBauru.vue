@@ -11,12 +11,13 @@
       </button>
     </div>
 
-    <button class="iniciar-btn" v-if="!monitorando" @click="abrirSelecaoVeiculo">
+    <button class="iniciar-btn" v-if="!monitorando && !menuAberto" @click="abrirSelecaoVeiculo">
       Iniciar monitoramento
     </button>
 
     <div v-if="mostrarSelecao" class="modal-overlay">
       <div class="modal-content">
+        <button class="modal-close-btn" @click="fecharSelecaoVeiculo">&times;</button>
         <h3>Selecione o tipo de veículo</h3>
         <ul class="lista-veiculos">
           <li v-for="(label, key) in tiposVeiculos" :key="key">
@@ -37,6 +38,14 @@ import "@/assets/alertasBauru.css"
 
 export default {
   name: "AlertasBauru",
+
+  props: {
+    menuAberto: {
+      type: Boolean,
+      default: false
+    }
+  },
+
   data() {
     return {
       map: null,
@@ -162,10 +171,14 @@ export default {
     // Métodos Existentes
     // ------------------------------------------------------------------
 
+    fecharSelecaoVeiculo() {
+      this.mostrarSelecao = false;
+    },
+    
     abrirSelecaoVeiculo() {
       this.mostrarSelecao = true
     },
-
+    
     selecionarVeiculo(tipo) {
       this.tipoSelecionado = tipo
       this.mostrarSelecao = false
