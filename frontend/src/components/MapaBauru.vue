@@ -4,7 +4,7 @@
     <div class="map-filters-overlay">
       
       <div class="filtro-grupo">
-        <strong>Período de Análise</strong>
+        <strong>Período de análise</strong>
         <div class="filtro-item">
           <label for="map-data-inicio">De:</label>
           <input type="date" id="map-data-inicio" v-model="filtroDataInicio" :min="minData" :max="maxData">
@@ -16,14 +16,14 @@
       </div>
       
       <div class="filtro-grupo">
-        <strong>Tipo de Visualização</strong>
+        <strong>Tipo de visualização</strong>
         <div class="filtro-item-radio">
           <input type="radio" id="view-cluster" value="cluster" v-model="viewMode">
           <label for="view-cluster">Agrupado (Cluster)</label>
         </div>
         <div class="filtro-item-radio">
           <input type="radio" id="view-heatmap" value="heatmap" v-model="viewMode">
-          <label for="view-heatmap">Mapa de Calor</label>
+          <label for="view-heatmap">Mapa de calor</label>
         </div>
       </div>
       

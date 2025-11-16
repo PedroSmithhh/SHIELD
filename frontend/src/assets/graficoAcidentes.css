@@ -1,29 +1,45 @@
+/* Correção do Título e Fundo Principal */
 .graficos-container {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  padding: 30px;
+  /* Espaço no topo para evitar que o conteúdo fique sob a navbar fixa (hamburguer) */
+  padding-top: 70px; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f4e4; 
   max-width: 1200px;
   margin: 0 auto;
+  min-height: 100vh;
+}
+
+.graficos-container h2 {
+    color: #4e3f30; /* Cor escura do texto */
+    margin-bottom: 10px;
+}
+
+.graficos-container p {
+    color: #4e3f30; /* Cor secundária suave */
+    margin-bottom: 20px;
 }
 
 .graficos-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
+  gap: 25px;
 }
 
 .grafico-secao {
   margin-bottom: 0;
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: a5b3aa;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 8px rgba(12, 165, 176, 0.3);
 }
 
 .grafico-secao h3 {
-  color: #333;
-  border-bottom: 2px solid #007bff;
-  padding-bottom: 5px;
+  color: #0ca5b0;
+  border-bottom: 2px solid #0ca5b0;
+  padding-bottom: 8px;
+  font-size: 1.6em;
+  letter-spacing: 0.5px;
 }
 
 .chart-wrapper {
@@ -36,36 +52,90 @@
   text-align: center;
   font-size: 1.2em;
   padding: 40px;
-  color: #555;
+  color: #a5b3aa;
 }
 
+/* Container de Filtros (Ajustado para permitir colunas/linhas) */
 .filtros-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-direction: column; /* Organiza em colunas (uma linha embaixo da outra) */
+  gap: 15px; /* Espaço entre as "linhas" (divs filtro-linha) */
   margin-top: 15px;
-  padding: 15px;
-  background-color: #e9ecef;
+  padding: 20px;
+  background-color: #4e3f30;
   border-radius: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Linha de Filtros */
+.filtro-linha {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+    align-items: flex-end; /* Alinha os itens pela base */
 }
 
 .filtro {
   display: flex;
   flex-direction: column;
+  flex-grow: 1; /* Permite que os filtros cresçam e ocupem o espaço */
+  min-width: 150px; /* Garante que os filtros não fiquem muito estreitos */
 }
 
 .filtro label {
   font-weight: bold;
   margin-bottom: 5px;
   font-size: 0.9em;
-  color: #343a40;
+  color: #fefeeb;
 }
 
 .filtro select,
 .filtro input[type="date"] {
-  padding: 8px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
+  padding: 10px;
+  background: #151a1d;
+  border: 1px solid #0ca5b0;
+  border-radius: 6px;
   font-size: 1em;
+  color: #fefeeb;
+  transition: border-color 0.3s;
+  /* Garante que o input de data tenha a mesma altura */
+  height: 40px; 
+  box-sizing: border-box;
+}
+
+.filtro select:focus,
+.filtro input[type="date"]:focus {
+  border-color: #fefeeb;
+  outline: none;
+}
+
+/* Estilo para a linha de ações (onde está o botão) */
+.acoes-linha {
+    justify-content: flex-start; /* Alinha o conteúdo à esquerda */
+}
+
+/* Botão de Limpar Filtros */
+.btn-limpar-filtros {
+    background: #a5b3aa; /* Cor secundária/Cinza */
+    color: #151a1d; 
+    border: none;
+    border-radius: 6px;
+    padding: 10px 15px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-end; /* Alinha com a altura dos campos de data */
+    height: 40px;
+}
+
+.btn-limpar-filtros:hover {
+    background: #0ca5b0; /* Destaque no hover */
+    box-shadow: 0 0 8px rgba(12, 165, 176, 0.6);
+}
+
+/* Ajuste específico para a data para que o botão fique alinhado */
+.filtro-data {
+    min-width: 170px;
 }

@@ -4,30 +4,50 @@
     <p>Análise exploratória dos dados de acidentes em Bauru (2022-2025).</p>
 
     <hr>
+<div class="filtros-container">
+    <div class="filtro-linha">
+        <div class="filtro">
+            <label for="filtro-chuva">Condição climática:</label>
+            <select id="filtro-chuva" v-model="filtroChuva">
+                <option value="Todos">Todos</option>
+                <option value="Sem chuva">Sem chuva</option>
+                <option value="Chuva fraca">Chuva fraca</option>
+                <option value="Chuva moderada">Chuva moderada</option>
+                <option value="Chuva forte">Chuva forte</option>
+                <option value="Chuva violenta">Chuva violenta</option>
+            </select>
+        </div>
+        
+        <div class="filtro">
+            <label for="filtro-idade">Faixa etária:</label>
+            <select id="filtro-idade" v-model="filtroFaixaEtaria">
+                <option value="Todos">Todos</option>
+                <option value="0 a 9 anos">0 a 9 anos</option>
+                <option value="10 a 17 anos">10 a 17 anos</option>
+                <option value="18 a 29 anos">18 a 29 anos</option>
+                <option value="30 a 59 anos">30 a 59 anos</option>
+                <option value="60 a 79 anos">60 a 79 anos</option>
+                <option value="Mais de 80 anos">Mais de 80 anos</option>
+            </select>
+        </div>
+        </div>
 
-    <div class="filtros-container">
-      <div class="filtro">
-        <label for="filtro-chuva">Condição Climática:</label>
-        <select id="filtro-chuva" v-model="filtroChuva">
-          <option value="Todos">Todos</option>
-          <option value="Sem chuva">Sem Chuva</option>
-          <option value="Chuva fraca">Chuva Fraca</option>
-          <option value="Chuva moderada">Chuva Moderada</option>
-          <option value="Chuva forte">Chuva Forte</option>
-          <option value="Chuva violenta">Chuva Violenta</option>
-        </select>
-      </div>
+    <div class="filtro-linha acoes-linha">
+        <div class="filtro filtro-data">
+            <label for="data-inicio">Data Início:</label>
+            <input type="date" id="data-inicio" v-model="filtroDataInicio" :min="minData" :max="maxData">
+        </div>
 
-      <div class="filtro">
-        <label for="data-inicio">Data Início:</label>
-        <input type="date" id="data-inicio" v-model="filtroDataInicio" :min="minData" :max="maxData">
-      </div>
-
-      <div class="filtro">
-        <label for="data-fim">Data Fim:</label>
-        <input type="date" id="data-fim" v-model="filtroDataFim" :min="minData" :max="maxData">
-      </div>
-    </div>
+        <div class="filtro filtro-data">
+            <label for="data-fim">Data Fim:</label>
+            <input type="date" id="data-fim" v-model="filtroDataFim" :min="minData" :max="maxData">
+        </div>
+        
+        <button class="btn-limpar-filtros" @click="limparFiltros">
+            Limpar Filtros
+        </button>
+        </div>
+</div>
 
     <div v-if="loading" class="loading-aviso">
       Carregando dados...
@@ -35,35 +55,35 @@
 
     <div v-if="!loading" class="graficos-grid">
       <div class="grafico-secao">
-        <h3>Número de Acidentes por Tipo de Veículo Envolvido</h3>
+        <h3>Distribuição de acidentes por tipo de veículo</h3>
         <div class="chart-wrapper">
           <canvas id="graficoAcidentesPorVeiculo"></canvas>
         </div>
       </div>
 
       <div class="grafico-secao">
-        <h3>Acidentes por Hora do Dia</h3>
+        <h3>Distruibuição horária dos acidentes</h3>
         <div class="chart-wrapper">
           <canvas id="graficoAcidentesPorHora"></canvas>
         </div>
       </div>
 
       <div class="grafico-secao">
-        <h3>Vítimas por Faixa Etária e Gravidade</h3>
+        <h3>Distribuição de vítimas por faixa etária e nível de gravidade</h3>
         <div class="chart-wrapper">
           <canvas id="graficoVitimasFaixaEtaria"></canvas>
         </div>
       </div>
 
       <div class="grafico-secao">
-        <h3>Número de Acidentes por Tipo de de Via</h3>
+        <h3>Distribuição de acidentes por tipo de via</h3>
         <div class="chart-wrapper">
           <canvas id="graficoAcidentesPorVia"></canvas>
         </div>
       </div>
 
       <div class="grafico-secao">
-        <h3>Impacto da Chuva na Gravidade das Vítimas</h3>
+        <h3>Impacto da chuva na gravidade dos acidentes</h3>
         <div class="chart-wrapper">
           <canvas id="graficoImpactoChuva"></canvas>
         </div>
@@ -90,6 +110,7 @@ export default {
       filtroChuva: 'Todos',
       filtroDataInicio: '',
       filtroDataFim: '',
+      filtroFaixaEtaria: 'Todos',
       minData: '2022-01-01',
       maxData: '2025-02-28',
       loading: true,
@@ -135,6 +156,9 @@ export default {
     },
     filtroDataFim() {
       this.updateAllCharts();
+    },
+    filtroFaixaEtaria() {
+      this.updateAllCharts();
     }
   },
 
@@ -178,6 +202,13 @@ export default {
       this.maxData = max;
       this.filtroDataInicio = min;
       this.filtroDataFim = max;
+    },
+
+    limparFiltros() {
+            this.filtroChuva = 'Todos';
+            this.filtroFaixaEtaria = 'Todos';
+            this.filtroDataInicio = this.minData; 
+            this.filtroDataFim = this.maxData;
     },
 
     createChartInstances() {
@@ -227,13 +258,13 @@ export default {
               beginAtZero: true, 
               title: { 
                 display: true, 
-                text: 'Nº de Acidentes' 
+                text: 'Nº de acidentes' 
               } 
             },
             x: { 
               title: { 
                 display: true, 
-                text: 'Hora do Dia' 
+                text: 'Hora' 
               } 
             }
           },
@@ -259,14 +290,14 @@ export default {
               stacked: true, 
               title: { 
                 display: true, 
-                text: 'Nº de Vítimas' 
+                text: 'Nº de vítimas' 
               } 
             },
             y: { 
               stacked: true, 
               title: { 
                 display: true, 
-                text: 'Faixa Etária' 
+                text: 'Faixa etária' 
               } 
             }
           },
@@ -290,13 +321,13 @@ export default {
               beginAtZero: true,
               title: {
                 display: true,
-                text: 'Nº de Acidentes'
+                text: 'Nº de acidentes'
               }
             },
             x: {
               title: {
                 display: true,
-                text: 'Tipo de Via'
+                text: 'Tipo de via'
               }
             }
           },
@@ -322,14 +353,14 @@ export default {
               stacked: true,
               title: {
                 display: true,
-                text: 'Nº de Vítimas'
+                text: 'Nº de vítimas'
               }
             },
             y: {
               stacked: true,
               title: {
                 display: true,
-                text: 'Condição Climática'
+                text: 'Condição climática'
               }
             }
           },
