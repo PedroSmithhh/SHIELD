@@ -9,6 +9,7 @@ import joblib
 import traceback
 import logging
 import requests
+import overpy
 
 # CONFIGURAÇÕES E LOGS
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -97,6 +98,36 @@ def obter_chuva(latitude, longitude):
         return 0
 
 
+# ------------------------------------------
+# Função auxiliar para obter tipo da via atual
+# ------------------------------------------
+def obter_tipo_via(latitude, longitude, raio_metros):
+
+    api = overpy.Overpass()
+    query = f"""
+    [out:json][timeout:30];
+    way(around:{raio_metros},{latitude},{longitude})["highway"];
+    out tags;
+    """
+    
+    try:
+        result = api.query(query)
+    except overpy.exception.OverpassGatewayTimeout:
+        print("O servidor Overpass excedeu o tempo limite. (0 como fallback)")
+        return 0
+    except Exception as e:
+        print(f"Ocorreu um erro na consulta: {e} (0 como fallback)")
+        return 0
+
+    for way in result.ways:
+        highway_tag = way.tags.get("highway")
+        name_tag = way.tags.get("name", "")
+        logging.info(f"Nome do local: {name_tag}")
+        if highway_tag in ["motorway", "trunk", "primary", "secondary"]:
+            return 1
+    return 0
+
+
 # ============================
 # ENDPOINT PRINCIAL (CALCULAR RISCO)
 # ============================
@@ -117,6 +148,7 @@ async def calcular_risco(features: InputFeatures):
         hora_int = now.hour
 
         response_chuva = obter_chuva(features.latitude, features.longitude)
+        response_via = obter_tipo_via(features.latitude, features.longitude, 10)
 
         input_data = {
             "latitude": features.latitude,
