@@ -17,20 +17,7 @@
                 <option value="Chuva violenta">Chuva violenta</option>
             </select>
         </div>
-        
-        <div class="filtro">
-            <label for="filtro-idade">Faixa etária:</label>
-            <select id="filtro-idade" v-model="filtroFaixaEtaria">
-                <option value="Todos">Todos</option>
-                <option value="0 a 9 anos">0 a 9 anos</option>
-                <option value="10 a 17 anos">10 a 17 anos</option>
-                <option value="18 a 29 anos">18 a 29 anos</option>
-                <option value="30 a 59 anos">30 a 59 anos</option>
-                <option value="60 a 79 anos">60 a 79 anos</option>
-                <option value="Mais de 80 anos">Mais de 80 anos</option>
-            </select>
-        </div>
-        </div>
+      </div>
 
     <div class="filtro-linha acoes-linha">
         <div class="filtro filtro-data">
@@ -110,7 +97,6 @@ export default {
       filtroChuva: 'Todos',
       filtroDataInicio: '',
       filtroDataFim: '',
-      filtroFaixaEtaria: 'Todos',
       minData: '2022-01-01',
       maxData: '2025-02-28',
       loading: true,
@@ -157,9 +143,6 @@ export default {
     filtroDataFim() {
       this.updateAllCharts();
     },
-    filtroFaixaEtaria() {
-      this.updateAllCharts();
-    }
   },
 
   // Executado imediatamente após o componente ter sido montado no DOM

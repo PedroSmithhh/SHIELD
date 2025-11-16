@@ -11,7 +11,7 @@
       </button>
     </div>
 
-    <button class="iniciar-btn" v-if="!monitorando && !menuAberto" @click="abrirSelecaoVeiculo">
+    <button class="iniciar-btn" v-if="!monitorando" @click="abrirSelecaoVeiculo">
       Iniciar monitoramento
     </button>
 
@@ -38,14 +38,6 @@ import "@/assets/alertasBauru.css"
 
 export default {
   name: "AlertasBauru",
-
-  props: {
-    menuAberto: {
-      type: Boolean,
-      default: false
-    }
-  },
-
   data() {
     return {
       map: null,
@@ -192,7 +184,7 @@ export default {
       this.iniciarGeolocalizacao()
     },
 
-    onMapClick(e) {
+onMapClick(e) {
       const lat = e.latlng.lat;
       const lng = e.latlng.lng;
 
@@ -209,15 +201,17 @@ export default {
 
       this.clickMarker = L.marker([lat, lng], { icon: icon }).addTo(this.map);
 
-      const container = L.DomUtil.create('div');
-      const title = L.DomUtil.create('b', '', container);
+      const container = L.DomUtil.create('div', 'dev-popup-content');
+      
+      const title = L.DomUtil.create('b', 'dev-popup-title', container);
       title.innerText = 'Simular coordenadas:';
-      const coords = L.DomUtil.create('p', '', container);
-      coords.innerText = `Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`;
-      const button = L.DomUtil.create('button', '', container);
-      button.innerText = 'Mover usuário';
-      button.style = "background:#007bff; color:white; border:none; padding: 5px 10px; border-radius: 5px; cursor:pointer;";
 
+      const coords = L.DomUtil.create('p', 'dev-popup-coords', container);
+      coords.innerText = `Lat: ${lat.toFixed(6)}, Lng: ${lng.toFixed(6)}`;
+
+      const button = L.DomUtil.create('button', 'dev-popup-btn', container);
+      button.innerText = 'Mover usuário';
+      
       const vm = this;
       L.DomEvent.on(button, 'click', (ev) => {
           L.DomEvent.stopPropagation(ev);

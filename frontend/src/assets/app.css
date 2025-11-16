@@ -1,32 +1,32 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #151a1d; 
+  background-color: #151a1d;
 }
 
 .navbar {
-  background: #151a1d; 
-  padding: 15px 20px; 
-  position: fixed; 
+  background: #151a1d;
+  padding: 15px 20px;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  z-index: 999; 
+  z-index: 9999;
 }
 
 .menu-btn {
   background: none;
   border: none;
-  font-size: 30px; 
-  color: #0ca5b0; 
+  font-size: 30px;
+  color: #0ca5b0;
   cursor: pointer;
-  text-shadow: 0 0 5px rgba(12, 165, 176, 0.8); 
+  text-shadow: 0 0 5px rgba(12, 165, 176, 0.8);
   transition: transform 0.3s ease;
 }
 
 .menu-btn:hover {
-    transform: scale(1.1); 
+  transform: scale(1.1);
 }
 
 .menu-overlay {
@@ -35,13 +35,13 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.98); 
+  background: rgba(0, 0, 0, 0.98);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 10000;
   opacity: 1;
-  transition: opacity 0.5s ease; 
+  transition: opacity 0.5s ease;
 }
 
 .menu-list {
@@ -49,26 +49,26 @@ body {
   margin: 0;
   padding: 20px;
   text-align: center;
-  background: rgba(40, 50, 55, 0.1); 
+  background: rgba(40, 50, 55, 0.1);
   border-radius: 10px;
   max-width: 80%;
 }
 
 .menu-list li {
-  font-size: 1.6em; 
-  padding: 25px 40px; 
+  font-size: 1.6em;
+  padding: 25px 40px;
   margin: 10px 0;
   cursor: pointer;
-  color: #fefeeb; 
-  border: 1px solid rgba(12, 165, 176, 0.3); 
+  color: #fefeeb;
+  border: 1px solid rgba(12, 165, 176, 0.3);
   border-radius: 8px;
   transition: all 0.4s ease;
   letter-spacing: 1.5px;
 }
 
 .menu-list li:hover {
-  background: rgba(12, 165, 176, 0.2); 
-  color: #0ca5b0; 
+  background: rgba(12, 165, 176, 0.2);
+  color: #0ca5b0;
   box-shadow: 0 0 10px rgba(12, 165, 176, 0.6);
-  transform: translateX(5px); 
+  transform: translateX(5px);
 }

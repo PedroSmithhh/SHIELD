@@ -1,7 +1,5 @@
-/* Correção do Título e Fundo Principal */
 .graficos-container {
   padding: 30px;
-  /* Espaço no topo para evitar que o conteúdo fique sob a navbar fixa (hamburguer) */
   padding-top: 70px; 
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f8f4e4; 
@@ -11,12 +9,12 @@
 }
 
 .graficos-container h2 {
-    color: #4e3f30; /* Cor escura do texto */
+    color: #4e3f30;
     margin-bottom: 10px;
 }
 
 .graficos-container p {
-    color: #4e3f30; /* Cor secundária suave */
+    color: #4e3f30;
     margin-bottom: 20px;
 }
 
@@ -55,11 +53,10 @@
   color: #a5b3aa;
 }
 
-/* Container de Filtros (Ajustado para permitir colunas/linhas) */
 .filtros-container {
   display: flex;
-  flex-direction: column; /* Organiza em colunas (uma linha embaixo da outra) */
-  gap: 15px; /* Espaço entre as "linhas" (divs filtro-linha) */
+  flex-direction: column; 
+  gap: 15px;
   margin-top: 15px;
   padding: 20px;
   background-color: #4e3f30;
@@ -68,20 +65,19 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-/* Linha de Filtros */
 .filtro-linha {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     width: 100%;
-    align-items: flex-end; /* Alinha os itens pela base */
+    align-items: flex-end; 
 }
 
 .filtro {
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Permite que os filtros cresçam e ocupem o espaço */
-  min-width: 150px; /* Garante que os filtros não fiquem muito estreitos */
+  flex-grow: 1; 
+  min-width: 150px; 
 }
 
 .filtro label {
@@ -100,7 +96,6 @@
   font-size: 1em;
   color: #fefeeb;
   transition: border-color 0.3s;
-  /* Garante que o input de data tenha a mesma altura */
   height: 40px; 
   box-sizing: border-box;
 }
@@ -111,14 +106,13 @@
   outline: none;
 }
 
-/* Estilo para a linha de ações (onde está o botão) */
 .acoes-linha {
-    justify-content: flex-start; /* Alinha o conteúdo à esquerda */
+    justify-content: flex-start;
 }
 
-/* Botão de Limpar Filtros */
+
 .btn-limpar-filtros {
-    background: #a5b3aa; /* Cor secundária/Cinza */
+    background: #a5b3aa; 
     color: #151a1d; 
     border: none;
     border-radius: 6px;
@@ -126,16 +120,20 @@
     font-size: 1em;
     cursor: pointer;
     transition: all 0.3s ease;
-    align-self: flex-end; /* Alinha com a altura dos campos de data */
+    align-self: flex-end; 
     height: 40px;
 }
 
 .btn-limpar-filtros:hover {
-    background: #0ca5b0; /* Destaque no hover */
+    background: #0ca5b0;
     box-shadow: 0 0 8px rgba(12, 165, 176, 0.6);
 }
 
-/* Ajuste específico para a data para que o botão fique alinhado */
-.filtro-data {
-    min-width: 170px;
+
+.filtro input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+  padding-right: 5px;
+  opacity: 0.8;
 }
+
