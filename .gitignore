@@ -3,3 +3,6 @@ data/
 data_raw/
 src/model/modelo_risco_viario_RF.pkl
 dataset_final_para_modelo_1_200.csv
+_ _pycache_ _/
+*.py[cod]
+*$py.class
