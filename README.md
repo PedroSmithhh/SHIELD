@@ -41,7 +41,7 @@ O trânsito urbano é um sistema complexo influenciado por fatores estáticos (g
 
 O sistema segue uma arquitetura cliente-servidor desacoplada, onde o frontend consome serviços de dados e predição providos pelo backend Python.
 
-![Diagrama de Blocos](img\diagrama_blocos.jpg)
+![Diagrama de Blocos](img/diagrama_blocos.jpg)
 
 
 ## **Tecnologias e Ferramentas**
