@@ -18,8 +18,8 @@ O **SHIELD** é uma plataforma full-stack de desenvolvida para analisar, monitor
 
 O trânsito urbano é um sistema complexo influenciado por fatores estáticos (geometria da via) e dinâmicos (clima, fluxo). O projeto SHIELD visa auxiliar gestores públicos e cidadãos através de:
 
-1. **Integração de Dados Heterogéneos:** Unificação de boletins de ocorrência, dados pluviométricos e malha viária.  
-2. **Análise Preditiva:** Estimar a probabilidade de sinistros em um determinado local sob condições específicas (ex: chuva intensa).  
+1. **Integração de Dados Heterogéneos:** dados pluviométricos e malha viária.  
+2. **Análise Preditiva:** Estimar o risco de sinistros em um determinado local sob condições específicas (ex: chuva intensa).  
 3. **Visualização Geoespacial:** Mapeamento interativo de zonas de risco.
 
 ## **Funcionalidades do Sistema**
@@ -67,27 +67,27 @@ O sistema segue uma arquitetura cliente-servidor desacoplada, onde o frontend co
 Descrição detalhada dos principais módulos do projeto:
 
 SHIELD/  
-├── data/                            \# Repositório de dados (Lake)  
-│   ├── Acidentes/                   \# Dados brutos de sinistros e veículos  
-│   └── Chuva/                       \# Séries temporais de precipitação (2022-2025)  
-├── frontend/                        \# Aplicação Web (Vue.js)  
-│   ├── public/                      \# Assets estáticos (JSONs geoespaciais)  
+├── data/                            # Repositório de dados (Lake)  
+│   ├── Acidentes/                   # Dados brutos de sinistros e veículos  
+│   └── Chuva/                       # Séries temporais de precipitação (2022-2025)  
+├── frontend/                        # Aplicação Web (Vue.js)  
+│   ├── public/                      # Assets estáticos (JSONs geoespaciais)  
 │   └── src/  
-│       ├── components/              \# Componentes Vue (Mapa, Gráficos, Alertas)  
-│       ├── assets/                  \# Estilos CSS e Imagens  
-│       └── services/                \# (Opcional) Comunicação com API  
-├── src/                             \# Núcleo do processamento Backend  
-│   ├── backend/                     \# Servidor da API  
-│   │   ├── server.py                \# Servidor genérico  
-│   │   └── server\_random\_forest.py  \# Servidor dedicado ao modelo final  
-│   ├── model/                       \# Modelos treinados serializados (.pkl)  
-│   └── pre\_processamento/           \# Scripts ETL (Limpeza e Padronização)  
-├── notebooks/                       \# Laboratório de Ciência de Dados  
-│   ├── amostragem\_negativa.ipynb    \# Geração de exemplos de não-acidentes  
-│   ├── analise\_pr\_auc.ipynb         \# Avaliação de métricas de performance  
-│   ├── xgboost.ipynb                \# Treinamento e tunagem do XGBoost  
-│   └── random\_forest.ipynb          \# Treinamento e tunagem do Random Forest  
-└── requirements.txt                 \# Dependências do projeto Python
+│       ├── components/              # Componentes Vue (Mapa, Gráficos, Alertas)  
+│       ├── assets/                  # Estilos CSS e Imagens  
+│       └── services/                # (Opcional) Comunicação com API  
+├── src/                             # Núcleo do processamento Backend  
+│   ├── backend/                     # Servidor da API  
+│   │   ├── server.py                # Servidor genérico  
+│   │   └── server\_random\_forest.py  # Servidor dedicado ao modelo final  
+│   ├── model/                       # Modelos treinados serializados (.pkl)  
+│   └── pre\_processamento/           # Scripts ETL (Limpeza e Padronização)  
+├── notebooks/                       # Laboratório de Ciência de Dados  
+│   ├── amostragem\_negativa.ipynb    # Geração de exemplos de não-acidentes  
+│   ├── analise\_pr\_auc.ipynb         # Avaliação de métricas de performance  
+│   ├── xgboost.ipynb                # Treinamento e tunagem do XGBoost  
+│   └── random\_forest.ipynb          # Treinamento e tunagem do Random Forest  
+└── requirements.txt                 # Dependências do projeto Python
 
 ## **Pipeline de Ciência de Dados**
 
@@ -96,10 +96,10 @@ O sucesso do modelo depende de um tratamento rigoroso dos dados, dada a natureza
 1. **ETL (Extração, Transformação e Carga):**  
    * Scripts em src/pre_processamento unificam bases de dados dispersas e corrigem inconsistências geográficas.  
 2. **Amostragem Negativa (Negative Sampling):**  
-   * Para que o modelo aprenda o que é "segurança", geramos exemplos sintéticos ou amostramos momentos reais onde **não** ocorreram acidentes.  
+   * Para que o modelo aprenda o que é "segurança", foi gerado exemplos sintéticos ou amostramos momentos reais onde **não** ocorreram acidentes.  
    * O projeto testou diversas proporções de balanceamento (arquivos dataset_final_para_modelo_1_4.csv, 1_20.csv, 1_50.csv) para encontrar o ponto ótimo entre precisão e recall.  
 3. **Seleção de Modelos:**  
-   * Foram avaliados: **Random Forest**, **XGBoost**, **SVM** e **MLP (Redes Neurais)**.  
+   * Foram avaliados: **Random Forest**, **XGBoost** e **MLP (Redes Neurais)**.  
    * O **Random Forest** apresentou a melhor consistência e robustez, sendo escolhido como modelo final (modelo_risco_viario_final.pkl).
 
 ## **Documentação da API**
@@ -186,5 +186,4 @@ O backend expõe endpoints para fornecer predições ao frontend.
 
 A validação dos modelos utilizou métricas adequadas para classes desbalanceadas, focando na **Curva Precision-Recall (PR-AUC)** em vez de apenas acurácia (que pode ser enganosa neste contexto).
 
-* **Modelo Campeão:** Random Forest.  
-* **Fatores de Influência:** A análise de importância de features (feature_importance) indicou que **locais específicos** e **volume de chuva** são determinantes críticos para o aumento do risco.
+* **Modelo Campeão:** Random Forest.
