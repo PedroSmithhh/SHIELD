@@ -1,72 +1,189 @@
-# Sistema de Geolocalização e Análise de Acidentes de Trânsito para Emissão de Alertas em Bauru
+# **🛡️ SHIELD - Sistema de Análise e Previsão de Risco Viário (Bauru-SP)**
 
-## Visão Geral
+O **SHIELD** é uma plataforma full-stack de desenvolvida para analisar, monitorar e prever riscos de acidentes de trânsito na cidade de Bauru-SP. O sistema integra dados históricos de sinistros (2022-2025) com condições meteorológicas (precipitação) para treinar modelos de Machine Learning capazes de identificar zonas de calor e prever a probabilidade de acidentes em tempo real.
 
-Este projeto tem como objetivo desenvolver um **Sistema de Geolocalização e Análise de Acidentes de Trânsito** para a cidade de Bauru, São Paulo, com foco na emissão de alertas para prevenção de acidentes. O sistema utiliza dados de sinistros (acidentes de trânsito) entre 2022 e 2025, coletados no site do INFOSIGA (https://www.infosiga.sp.gov.br), fornecidos em três datasets:
+## **Índice**
 
-1. **sinistros_2022-2025_bauru.csv**: Contém informações sobre os acidentes, como data, local, tipo de veículo, gravidade e tipo de sinistro.
-2. **pessoas_2022-2025_bauru.csv**: Detalha as pessoas envolvidas nos acidentes, incluindo idade, sexo, profissão, tipo de vítima e informações sobre óbitos.
-3. **veiculos_2022-2025_bauru.csv**: Registra os veículos envolvidos, com dados como ano de fabricação, modelo e cor.
+* [Visão Geral e Objetivos](#visão-geral-e-objetivos)  
+* [Funcionalidades do Sistema](#funcionalidades-do-sistema)  
+* [Arquitetura da Solução](#arquitetura-da-solução)  
+* [Tecnologias e Ferramentas](#tecnologias-e-ferramentas)  
+* [Estrutura de Diretórios](#estrutura-de-diretórios)  
+* [Pipeline de Ciência de Dados](#pipeline-de-ciência-de-dados)  
+* [Documentação da API](#documentação-da-api)  
+* [Guia de Instalação](#guia-de-instalação)  
+* [Resultados e Métricas](#resultados-e-métricas)
 
-O projeto está em desenvolvimento, com ênfase inicial na **limpeza e padronização dos dados** para garantir consistência e confiabilidade nas análises futuras, que incluirão geolocalização (usando latitude e longitude) e geração de alertas baseados em padrões de acidentes. A limpeza de dados é realizada em Python usando a biblioteca Pandas, e os datasets limpos são preparados para integração com ferramentas como Power BI para visualização.
+## **Visão Geral e Objetivos**
 
-## Progresso Atual
+O trânsito urbano é um sistema complexo influenciado por fatores estáticos (geometria da via) e dinâmicos (clima, fluxo). O projeto SHIELD visa auxiliar gestores públicos e cidadãos através de:
 
-Até o momento, o projeto focou na **limpeza de dados** para tratar valores ausentes, inconsistências e padronizações nos três datasets. Um script de limpeza (`data_cleaning.py`) foi desenvolvido e iterativamente atualizado para aplicar regras específicas de tratamento, garantindo que os dados estejam prontos para análises geográficas e estatísticas. As regras de limpeza são detalhadas abaixo.
+1. **Integração de Dados Heterogéneos:** dados pluviométricos e malha viária.  
+2. **Análise Preditiva:** Estimar o risco de sinistros em um determinado local sob condições específicas (ex: chuva intensa).  
+3. **Visualização Geoespacial:** Mapeamento interativo de zonas de risco.
 
-## Regras de Limpeza de Dados
+## **Funcionalidades do Sistema**
 
-As seguintes regras foram estabelecidas para tratar valores ausentes, padronizar termos e garantir consistência nos datasets. Cada regra é aplicada no script `data_cleaning.py` e reflete decisões tomadas com base no contexto dos dados e nas necessidades do sistema.
+### **Frontend (Dashboard Web)**
 
-### 1. Dataset: `sinistros_2022-2025_bauru.csv`
+* **Mapa Interativo (Leaflet):** Visualização de marcadores de acidentes e mapas de calor (Heatmaps) sobre a malha de Bauru.  
+* **Painel de Estatísticas:** Gráficos dinâmicos (Barra/Linha) mostrando a evolução temporal dos acidentes e tipos de veículos envolvidos.  
+* **Sistema de Alertas:** Notificações visuais baseadas nas previsões do modelo para as condições atuais.  
+* **Filtros de Visualização:** Seleção por ano, tipo de acidente ou condição climática.
 
-- **numero_logradouro**:
-  - Valores vazios são preenchidos com `"S/N"` (sem número), indicando que o sinistro ocorreu em um trecho sem número específico.
-- **hora_sinistro**:
-  - Valores vazios são preenchidos com `"99:99"`, um valor sentinela que indica horário não informado. Este valor é inválido para horas reais (que vão de 00:00 a 23:59), evitando confusão com sinistros que ocorreram à meia-noite.
-- **logradouro**:
-  - Valores vazios são preenchidos com `"NAO DISPONIVEL"`, indicando que o local do sinistro não foi registrado.
-- **latitude** e **longitude**:
-  - Valores vazios são preenchidos com `-9999`, um valor sentinela numérico que indica coordenadas não informadas. Este valor é improvável de representar uma localização real em Bauru.
-- **tp_veiculo_** (ex.: `tp_veiculo_motocicleta`, `tp_veiculo_automovel`)**:
-  - Representam a **quantidade** de veículos do tipo correspondente envolvidos no sinistro (ex.: `tp_veiculo_motocicleta = 2` indica duas motocicletas).
-  - Valores vazios são preenchidos com `0`, indicando que nenhum veículo daquele tipo esteve envolvido.
-  - Convertidos para tipo inteiro (`int`).
-- **gravidade_* (ex.: `gravidade_leve`, `gravidade_fatal`)**:
-  - Representam a **quantidade** de pessoas com o nível de gravidade correspondente (ex.: `gravidade_leve = 2` indica duas pessoas com lesões leves).
-  - Valores vazios são preenchidos com `0`, indicando que não houve pessoas com aquela gravidade.
-  - Convertidos para tipo inteiro (`int`).
-- **tp_sinistro_** (ex.: `tp_sinistro_atropelamento`, `tp_sinistro_colisao_frontal`)**:
-  - Valores vazios são preenchidos com `"N"`, indicando que o tipo de sinistro não se aplica ao acidente.
+### **Backend (API & ML)**
 
-### 2. Dataset: `pessoas_2022-2025_bauru.csv`
+* **API RESTful:** Endpoints para comunicação entre o modelo de ML e o frontend.  
+* **Classificação de Risco:** Algoritmo capaz de classificar um segmento viário como "Alto Risco" ou "Baixo Risco".  
+* **Processamento de Dados:** Scripts automáticos para limpeza e transformação de dados brutos (ETL).
 
-- **data_obito**:
-  - Valores vazios (indicando ausência de óbito) são preenchidos com `"1900-01-01"`, uma data sentinela válida que mantém o formato de data e é improvável de ocorrer nos dados (sinistros de 2022-2025).
-- **ano_obito**, **mes_obito**, **dia_obito**:
-  - Valores vazios são preenchidos com `-1`, um valor sentinela numérico que indica ausência de óbito.
-  - Convertidos para tipo inteiro (`int`).
-- **ano_mes_obito**:
-  - Valores vazios são preenchidos com `"1900/01"`, um valor sentinela que mantém o formato `"YYYY/MM"` e é consistente com `data_obito`.
-- **idade**:
-  - Valores vazios são preenchidos com `-1`, indicando idade não informada.
-  - Convertida para tipo inteiro (`int`).
-- **tipo_vitima**:
-  - Valores vazios são preenchidos com `"NAO DISPONIVEL"`, indicando que o tipo de vítima não foi registrado.
-- **profissao**:
-  - Valores vazios são preenchidos com `"NAO DISPONIVEL"`.
-  - Valores `"NÃO INFORMADO"` (com acento) são substituídos por `"NAO DISPONIVEL"`.
-- **tipo_veiculo_vitima**:
-  - Valores vazios são preenchidos com `"NAO DISPONIVEL"`, indicando que o tipo de veículo da vítima não foi informado.
+## **Arquitetura da Solução**
 
-### 3. Dataset: `veiculos_2022-2025_bauru.csv`
+O sistema segue uma arquitetura cliente-servidor desacoplada, onde o frontend consome serviços de dados e predição providos pelo backend Python.
 
-- **ano_fab** e **ano_modelo**:
-  - Valores vazios ou `0` são preenchidos com `-1`, um valor sentinela que indica ano não informado.
-  - Convertidos para tipo inteiro (`int`).
-- **cor_veiculo**:
-  - Valores vazios são preenchidos com `"NAO DISPONIVEL"`.
+![Diagrama de Blocos](img/diagrama_blocos.jpg)
 
-### 4. Padronização dos Termos:
 
-- Todos os valores `"NAO INFORMADO"` e `"NÃO INFORMADO"` em colunas categóricas são substituídos por `"NAO DISPONIVEL"`.
+## **Tecnologias e Ferramentas**
+
+### **Ciência de Dados e Backend**
+
+* **Linguagem:** Python 3.12+  
+* **Manipulação de Dados:** Pandas, NumPy, GeoPandas  
+* **Machine Learning:** Scikit-learn (Random Forest, SVM, MLP), XGBoost  
+* **Visualização de Dados:** Matplotlib, Seaborn  
+* **Servidor Web:** Framework Python nativo ou Flask (implícito em server.py)  
+* **Persistência de Modelo:** Pickle (.pkl)
+
+### **Frontend**
+
+* **Framework:** Vue.js 3 (Composition API)  
+* **Mapas:** Leaflet.js / Vue2Leaflet  
+* **Estilização:** CSS3 Scoped, Design Responsivo  
+* **Build Tool:** Vue CLI / Webpack
+
+## **Estrutura de Diretórios**
+
+Descrição detalhada dos principais módulos do projeto:
+
+SHIELD/  
+├── data/                            # Repositório de dados (Lake)  
+│   ├── Acidentes/                   # Dados brutos de sinistros e veículos  
+│   └── Chuva/                       # Séries temporais de precipitação (2022-2025)  
+├── frontend/                        # Aplicação Web (Vue.js)  
+│   ├── public/                      # Assets estáticos (JSONs geoespaciais)  
+│   └── src/  
+│       ├── components/              # Componentes Vue (Mapa, Gráficos, Alertas)  
+│       ├── assets/                  # Estilos CSS e Imagens  
+│       └── services/                # (Opcional) Comunicação com API  
+├── src/                             # Núcleo do processamento Backend  
+│   ├── backend/                     # Servidor da API  
+│   │   ├── server.py                # Servidor genérico  
+│   │   └── server\_random\_forest.py  # Servidor dedicado ao modelo final  
+│   ├── model/                       # Modelos treinados serializados (.pkl)  
+│   └── pre\_processamento/           # Scripts ETL (Limpeza e Padronização)  
+├── notebooks/                       # Laboratório de Ciência de Dados  
+│   ├── amostragem\_negativa.ipynb    # Geração de exemplos de não-acidentes  
+│   ├── analise\_pr\_auc.ipynb         # Avaliação de métricas de performance  
+│   ├── xgboost.ipynb                # Treinamento e tunagem do XGBoost  
+│   └── random\_forest.ipynb          # Treinamento e tunagem do Random Forest  
+└── requirements.txt                 # Dependências do projeto Python
+
+## **Pipeline de Ciência de Dados**
+
+O sucesso do modelo depende de um tratamento rigoroso dos dados, dada a natureza desbalanceada de acidentes de trânsito (muitos momentos "sem acidente" vs poucos "com acidente").
+
+1. **ETL (Extração, Transformação e Carga):**  
+   * Scripts em src/pre_processamento unificam bases de dados dispersas e corrigem inconsistências geográficas.  
+2. **Amostragem Negativa (Negative Sampling):**  
+   * Para que o modelo aprenda o que é "segurança", foi gerado exemplos sintéticos ou amostramos momentos reais onde **não** ocorreram acidentes.  
+   * O projeto testou diversas proporções de balanceamento (arquivos dataset_final_para_modelo_1_4.csv, 1_20.csv, 1_50.csv) para encontrar o ponto ótimo entre precisão e recall.  
+3. **Seleção de Modelos:**  
+   * Foram avaliados: **Random Forest**, **XGBoost** e **MLP (Redes Neurais)**.  
+   * O **Random Forest** apresentou a melhor consistência e robustez, sendo escolhido como modelo final (modelo_risco_viario_final.pkl).
+
+## **Documentação da API**
+
+O backend expõe endpoints para fornecer predições ao frontend.
+
+### **1. Verificar Status da API**
+
+* **Endpoint:** GET /  
+* **Retorno:** Confirmação de que o servidor está online.
+
+### **2. Prever Risco Viário**
+
+* **Endpoint:** POST /predict (Exemplo hipotético baseado na lógica do projeto)  
+* **Body (JSON):**  
+  {  
+    "latitude": -22.3145,  
+    "longitude": -49.0587,  
+    "precipitacao": 10.5,  
+    "hora": 18,  
+    "dia_semana": 4  
+  }
+
+* **Resposta:**  
+  {  
+    "risco": "Alto",  
+    "probabilidade": 0.85  
+  }
+
+## **Guia de Instalação**
+
+### **Pré-requisitos**
+
+* **Python 3.10+**  
+* **Node.js 16+ & NPM**
+
+### **Passo 1: Configurar Backend**
+
+1. Clone o repositório:  
+   git clone [https://github.com/pedrosmithhh/shield.git](https://github.com/pedrosmithhh/shield.git)  
+   cd shield
+
+2. Crie e ative o ambiente virtual:
+
+```bash
+   python -m venv venv
+```
+
+3. Instale as bibliotecas:
+
+```bash
+   pip install \-r requirements.txt
+```
+
+4. Inicie o servidor de predição: 
+
+```bash
+   python src/backend/server_random_forest.py
+```
+
+### **Passo 2: Configurar Frontend**
+
+1. Em um novo terminal, entre na pasta do frontend:
+
+```bash
+   cd frontend
+```
+
+2. Instale as dependências:
+
+```bash
+   npm install
+```
+
+3. Execute o projeto em modo de desenvolvimento:
+
+```bash
+   npm run serve
+```
+
+4. Acesse http://localhost:8080 no seu navegador.
+
+## **Resultados e Métricas**
+
+A validação dos modelos utilizou métricas adequadas para classes desbalanceadas, focando na **Curva Precision-Recall (PR-AUC)** em vez de apenas acurácia (que pode ser enganosa neste contexto).
+
+* **Modelo Campeão:** Random Forest.
