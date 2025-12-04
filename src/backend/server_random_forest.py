@@ -123,7 +123,7 @@ def obter_tipo_via(latitude, longitude, raio_metros):
         highway_tag = way.tags.get("highway")
         name_tag = way.tags.get("name", "")
         logging.info(f"Nome do local: {name_tag}")
-        if highway_tag in ["motorway", "trunk", "primary", "secondary"]:
+        if highway_tag in ["motorway", "trunk"]:
             return 1
     return 0
 
