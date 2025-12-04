@@ -40,18 +40,39 @@
       Carregando dados...
     </div>
 
+      <div class="grafico-secao">
+      <h3>Distribuição dos acidentes por ano (até 28 de fevereiro de 2025)</h3>
+      <div class="chart-wrapper">
+        <canvas id="graficoAcidentesAno"></canvas>
+      </div>
+    </div>
+
+      <div class="grafico-secao">
+        <h3>Distribuição dos acidentes por mês</h3>
+        <div class="chart-wrapper">
+          <canvas id="graficoAcidentesMes"></canvas>
+        </div>
+      </div>
+
+      <div class="grafico-secao">
+        <h3>Distribuição dos acidentes por dia da semana</h3>
+        <div class="chart-wrapper">
+          <canvas id="graficoAcidentesDiaSemana"></canvas>
+        </div>
+      </div>
+
+      <div class="grafico-secao">
+        <h3>Distribuição dos acidentes por hora</h3>
+        <div class="chart-wrapper">
+          <canvas id="graficoAcidentesPorHora"></canvas>
+        </div>
+      </div>
+
     <div v-if="!loading" class="graficos-grid">
       <div class="grafico-secao">
         <h3>Distribuição de acidentes por tipo de veículo</h3>
         <div class="chart-wrapper">
           <canvas id="graficoAcidentesPorVeiculo"></canvas>
-        </div>
-      </div>
-
-      <div class="grafico-secao">
-        <h3>Distruibuição horária dos acidentes</h3>
-        <div class="chart-wrapper">
-          <canvas id="graficoAcidentesPorHora"></canvas>
         </div>
       </div>
 
@@ -105,10 +126,13 @@ export default {
 
   created() {
     this.chartAcidentesPorVeiculo = null; // GRÁFICO 1
-    this.chartAcidentesPorHora = null; // GRÁFICO 2
-    this.chartVitimasFaixaEtaria = null; // GRÁFICO 3
-    this.chartAcidentesPorVia = null; // GRÁFICO 4
-    this.chartImpactoChuva = null; // GRÁFICO 5
+    this.chartAcidentesMes = null; // GRÁFICO 2
+    this.chartAcidentesDiaSemana = null; // GRÁFICO 3
+    this.chartAcidentesPorHora = null; // GRÁFICO 4
+    this.chartVitimasFaixaEtaria = null; // GRÁFICO 5
+    this.chartAcidentesPorVia = null; // GRÁFICO 6
+    this.chartImpactoChuva = null; // GRÁFICO 7
+    this.chartAcidentesAno = null;
   },
 
   // Funções que retornam um valor dependente de outros dados reativos
@@ -350,6 +374,102 @@ export default {
           plugins: { legend: { position: 'top' } }
         }
       });
+          // ============================
+      // GRÁFICO 6 — Acidentes por dia da semana
+      // ============================
+      const ctx6 = document.getElementById('graficoAcidentesDiaSemana').getContext('2d');
+      this.chartAcidentesDiaSemana = new Chart(ctx6, {
+        type: 'bar',
+        data: {
+          labels: [],
+          datasets: []
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Nº de acidentes'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Dia da semana'
+              }
+            }
+          },
+          plugins: { 
+            legend: { display: false } 
+          }
+        }
+      });
+
+
+
+      // ============================
+      // GRÁFICO 7 — Acidentes por mês
+      // ============================
+      const ctx7 = document.getElementById('graficoAcidentesMes').getContext('2d');
+      this.chartAcidentesMes = new Chart(ctx7, {
+        type: 'bar',
+        data: {
+          labels: [],
+          datasets: []
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Nº de acidentes'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Mês'
+              }
+            }
+          },
+          plugins: { 
+            legend: { display: false } 
+          }
+        }
+      });
+
+
+      // GRÁFICO — Acidentes por ano
+      const ctxAno = document.getElementById('graficoAcidentesAno').getContext('2d');
+      this.chartAcidentesAno = new Chart(ctxAno, {
+        type: 'bar',
+        data: {
+          labels: [],
+          datasets: []
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: 'Nº de acidentes' }
+            },
+            x: {
+              title: { display: true, text: 'Ano' }
+            }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+
+
     },
 
     updateAllCharts() {
@@ -361,7 +481,58 @@ export default {
       this.updateGraficoVitimasFaixaEtaria();
       this.updateGraficoAcidentesPorVia();
       this.updateGraficoImpactoChuva();
+      this.updateGraficoAcidentesDiaSemana();
+      this.updateGraficoAcidentesMes();    
+      this.updateGraficoAcidentesAno();   
     },
+
+        updateGraficoAcidentesAno() {
+      if (!this.chartAcidentesAno) return;
+
+      // anos que queremos sempre mostrar
+      const anosFixos = [2022, 2023, 2024,2025];
+
+      // inicializa contadores com zero para cada ano fixo
+      const counts = anosFixos.reduce((acc, ano) => {
+        acc[ano] = 0;
+        return acc;
+      }, {});
+
+      // percorre acidentes filtrados e incrementa o ano correspondente (se válido)
+      for (const acidente of this.filteredAcidentes) {
+        if (!acidente || !acidente.data_sinistro) continue;
+
+        // tenta extrair o ano de forma robusta (aceita 'YYYY-MM-DD' ou Date)
+        let ano;
+        const ds = acidente.data_sinistro;
+        if (typeof ds === 'string' && ds.length >= 4 && /^\d{4}/.test(ds)) {
+          ano = parseInt(ds.slice(0, 4), 10);
+        } else {
+          const d = new Date(ds);
+          if (!isNaN(d)) ano = d.getFullYear();
+        }
+
+        // só contabiliza se for um dos anos fixos
+        if (anosFixos.includes(ano)) {
+          counts[ano] = (counts[ano] || 0) + 1;
+        }
+      }
+
+      // prepara arrays para o Chart.js (mantendo a ordem 2022,2023,2024)
+      const anosLabels = anosFixos.map(a => String(a));
+      const valores = anosFixos.map(a => counts[a] || 0);
+
+      this.chartAcidentesAno.data.labels = anosLabels;
+      this.chartAcidentesAno.data.datasets = [{
+        label: 'Acidentes',
+        data: valores,
+        backgroundColor: '#ff6384'
+      }];
+
+      this.chartAcidentesAno.update();
+    },
+
+
 
     updateGraficoAcidentesPorVeiculo() {
       if (!this.chartAcidentesPorVeiculo) return;
@@ -406,6 +577,59 @@ export default {
       this.chartAcidentesPorVeiculo.update();
     },
 
+    updateGraficoAcidentesDiaSemana() {
+        if (!this.chartAcidentesDiaSemana) return;
+
+        const diasSemana = [
+          'Domingo', 'Segunda', 'Terça',
+          'Quarta', 'Quinta', 'Sexta', 'Sábado'
+        ];
+
+        const counts = Array(7).fill(0);
+
+        for (const acidente of this.filteredAcidentes) {
+          const data = new Date(acidente.data_sinistro);
+          const dia = data.getDay(); // 0 = domingo ... 6 = sábado
+          counts[dia]++;
+        }
+
+        this.chartAcidentesDiaSemana.data.labels = diasSemana;
+        this.chartAcidentesDiaSemana.data.datasets = [{
+          label: 'Acidentes',
+          data: counts,
+          backgroundColor: '#6f42c1'
+        }];
+
+        this.chartAcidentesDiaSemana.update();
+    },
+
+    updateGraficoAcidentesMes() {
+      if (!this.chartAcidentesMes) return;
+
+      const labelsMes = [
+        'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+        'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
+      ];
+
+      const counts = Array(12).fill(0);
+
+      for (const acidente of this.filteredAcidentes) {
+        const data = new Date(acidente.data_sinistro);
+        const mes = data.getMonth(); // 0 a 11
+        counts[mes]++;
+      }
+
+      this.chartAcidentesMes.data.labels = labelsMes;
+      this.chartAcidentesMes.data.datasets = [{
+        label: 'Acidentes',
+        data: counts,
+        backgroundColor: '#17a2b8'
+      }];
+
+      this.chartAcidentesMes.update();
+    },
+
+    
     updateGraficoAcidentesPorHora() {
       if (!this.chartAcidentesPorHora) return;
 
